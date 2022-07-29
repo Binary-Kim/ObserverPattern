@@ -14,14 +14,26 @@ protocol Subject {
 }
 
 protocol Observer: AnyObject {
-    func update(temperature: Float, humidity: Float, pressure: Float)
+    func update()
 }
 
 class WeatherData: Subject {
     private var observers: [Observer] = []
-    private var temperature: Float = 0
-    private var humidity: Float = 0
-    private var pressure: Float = 0
+    private var _temperature: Float = 0
+    private var _humidity: Float = 0
+    private var _pressure: Float = 0
+    
+    var temperature: Float {
+        self._temperature
+    }
+    
+    var humidity: Float {
+        self._humidity
+    }
+    
+    var pressure: Float {
+        self._pressure
+    }
     
     func registerObserver(observer: Observer) {
         self.observers.append(observer)
@@ -37,7 +49,7 @@ class WeatherData: Subject {
     
     func notifyObservers() {
         for observer in self.observers {
-            observer.update(temperature: self.temperature, humidity: self.humidity, pressure: self.pressure)
+            observer.update()
         }
     }
     
@@ -46,9 +58,9 @@ class WeatherData: Subject {
     }
     
     func setMeasurements(temperature: Float, humidity: Float, pressure: Float) {
-        self.temperature = temperature
-        self.humidity = humidity
-        self.pressure = pressure
+        self._temperature = temperature
+        self._humidity = humidity
+        self._pressure = pressure
         self.measurementsChanged()
     }
 }
